@@ -132,7 +132,7 @@
             </build>
         </profile>
         <profile>
-            <id>entasi-release</id>
+            <id>entaksi-release</id>
             <distributionManagement>
                 <repository>
                     <id>maintenact</id>
