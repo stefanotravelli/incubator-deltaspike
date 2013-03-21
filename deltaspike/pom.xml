@@ -131,6 +131,21 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>entasi-release</id>
+            <distributionManagement>
+                <repository>
+                    <id>maintenact</id>
+                    <name>Entaksi Maven repository-releases</name>
+                    <url>https://www.entaksi.eu/maven/entaksi-public-local</url>
+                </repository>
+                <snapshotRepository>
+                    <id>maintenact</id>
+                    <name>Entaksi Maven repository-snapshots</name>
+                    <url>https://www.entaksi.eu/maven/entaksi-public-local</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
     </profiles>
 
 </project>
