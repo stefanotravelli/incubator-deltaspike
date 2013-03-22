@@ -27,6 +27,7 @@ import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +61,10 @@ public class DefaultMessage implements Message
     @Override
     public Message argument(Serializable... arguments)
     {
-        Collections.addAll(this.arguments, arguments);
+        if (arguments != null)
+        {
+            Collections.addAll(this.arguments, arguments);
+        }
         return this;
     }
 
@@ -211,5 +215,25 @@ public class DefaultMessage implements Message
         int result = getTemplate().hashCode();
         result = 31 * result + (arguments != null ? arguments.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public Message argumentArray(Serializable[] arguments)
+    {
+        if (arguments != null)
+        {
+            return argument(Arrays.asList(arguments)); 
+        }
+        return this;
+    }
+
+    @Override
+    public Message argument(Collection<Serializable> arguments)
+    {
+        if (arguments != null)
+        {
+            this.arguments.addAll(arguments); 
+        }
+        return this;
     }
 }
