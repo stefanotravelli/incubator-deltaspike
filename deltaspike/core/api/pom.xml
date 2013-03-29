@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.deltaspike.core</groupId>
         <artifactId>core-project</artifactId>
-        <version>0.4.1-interim</version>
+        <version>0.4.2-interim-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

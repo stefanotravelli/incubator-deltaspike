@@ -36,7 +36,7 @@
     -->
     <groupId>org.apache.deltaspike</groupId>
     <artifactId>deltaspike-project</artifactId>
-    <version>0.4.1-interim</version>
+    <version>0.4.2-interim-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache DeltaSpike</name>

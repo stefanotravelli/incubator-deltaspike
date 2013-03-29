@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.deltaspike.modules</groupId>
         <artifactId>modules-project</artifactId>
-        <version>0.4.1-interim</version>
+        <version>0.4.2-interim-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.deltaspike.modules</groupId>
     <artifactId>security-module-project</artifactId>
-    <version>0.4.1-interim</version>
+    <version>0.4.2-interim-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache DeltaSpike Security-Module</name>
