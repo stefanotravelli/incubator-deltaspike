@@ -41,16 +41,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Typed()
 public class DefaultViewConfigResolver implements ViewConfigResolver
 {
-    private Map<String, ViewConfigDescriptor> viewIdToViewDefinitionEntryMapping =
-        new ConcurrentHashMap<String, ViewConfigDescriptor>();
     private Map<Class<? extends ViewConfig>, ViewConfigDescriptor> viewDefinitionToViewDefinitionEntryMapping;
+    private Map<String, ViewConfigDescriptor> viewPathToViewDefinitionEntryMapping;
+
     private Map<Class, ConfigDescriptor> folderDefinitionToViewDefinitionEntryMapping;
     private Map<String, ConfigDescriptor> folderPathToViewDefinitionEntryMapping;
+
     private ViewConfigDescriptor defaultErrorView;
 
     public DefaultViewConfigResolver(ViewConfigNode rootViewConfigNode,
@@ -91,26 +91,26 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
                 else
                 {
                     foundViewIds.put(
-                        currentViewConfigDescriptor.getViewId(), currentViewConfigDescriptor.getViewConfig());
+                        currentViewConfigDescriptor.getViewId(), currentViewConfigDescriptor.getConfigClass());
                 }
 
                 if (this.defaultErrorView == null)
                 {
-                    if (DefaultErrorView.class.isAssignableFrom(currentViewConfigDescriptor.getViewConfig()))
+                    if (DefaultErrorView.class.isAssignableFrom(currentViewConfigDescriptor.getConfigClass()))
                     {
                         this.defaultErrorView = currentViewConfigDescriptor;
                     }
                 }
-                else if (DefaultErrorView.class.isAssignableFrom(currentViewConfigDescriptor.getViewConfig()))
+                else if (DefaultErrorView.class.isAssignableFrom(currentViewConfigDescriptor.getConfigClass()))
                 {
                     throw new IllegalStateException("It isn't allowed to configure multiple default-error-views. " +
-                        "Found default-error-views: " + this.defaultErrorView.getViewConfig() + " and " +
-                        currentViewConfigDescriptor.getViewConfig().getName());
+                        "Found default-error-views: " + this.defaultErrorView.getConfigClass() + " and " +
+                        currentViewConfigDescriptor.getConfigClass().getName());
                 }
 
-                if (!viewConfigs.containsKey(currentViewConfigDescriptor.getViewConfig()))
+                if (!viewConfigs.containsKey(currentViewConfigDescriptor.getConfigClass()))
                 {
-                    viewConfigs.put(currentViewConfigDescriptor.getViewConfig(), currentViewConfigDescriptor);
+                    viewConfigs.put(currentViewConfigDescriptor.getConfigClass(), currentViewConfigDescriptor);
                 }
             }
             else
@@ -158,7 +158,7 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
     }
 
     @Override
-    public ConfigDescriptor getConfigDescriptor(String path)
+    public ConfigDescriptor<?> getConfigDescriptor(String path)
     {
         if (path == null)
         {
@@ -183,11 +183,11 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
             return null;
         }
 
-        return this.viewIdToViewDefinitionEntryMapping.get(viewId);
+        return this.viewPathToViewDefinitionEntryMapping.get(viewId);
     }
 
     @Override
-    public ConfigDescriptor getConfigDescriptor(Class configClass)
+    public ConfigDescriptor<?> getConfigDescriptor(Class configClass)
     {
         ConfigDescriptor result = null;
         if (ViewConfig.class.isAssignableFrom(configClass))
@@ -204,12 +204,18 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
     }
 
     @Override
-    public List<ConfigDescriptor> getConfigDescriptors()
+    public List<ConfigDescriptor<?>> getConfigDescriptors()
     {
-        ConfigDescriptor[] result = this.folderDefinitionToViewDefinitionEntryMapping.values()
-                .toArray(new ConfigDescriptor[this.folderDefinitionToViewDefinitionEntryMapping.size()]);
+        ConfigDescriptor<?>[] folderResult = this.folderDefinitionToViewDefinitionEntryMapping.values()
+                .toArray(new ConfigDescriptor<?>[this.folderDefinitionToViewDefinitionEntryMapping.size()]);
 
-        return new ArrayList<ConfigDescriptor>(Arrays.asList(result));
+        ConfigDescriptor<?>[] viewResult = this.viewDefinitionToViewDefinitionEntryMapping.values()
+                .toArray(new ConfigDescriptor<?>[this.viewDefinitionToViewDefinitionEntryMapping.size()]);
+
+        List<ConfigDescriptor<?>> result = new ArrayList<ConfigDescriptor<?>>();
+        result.addAll(Arrays.asList(folderResult));
+        result.addAll(Arrays.asList(viewResult));
+        return result;
     }
 
     @Override
@@ -241,30 +247,32 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
     {
         //folders
         Map<String, ConfigDescriptor> folderPathMapping = new HashMap<String, ConfigDescriptor>();
-        for (ConfigDescriptor configDescriptor : this.folderDefinitionToViewDefinitionEntryMapping.values())
+        for (ConfigDescriptor folderConfigDescriptor : this.folderDefinitionToViewDefinitionEntryMapping.values())
         {
-            if (folderPathMapping.containsKey(configDescriptor.toString()))
+            if (folderPathMapping.containsKey(folderConfigDescriptor.toString()))
             {
                 throw new IllegalStateException("Duplicated config for the same folder configured. See: " +
                     folderPathMapping.get(
-                            configDescriptor.toString()).getConfigClass().getName() +
-                    " and " + configDescriptor.getConfigClass().getName());
+                            folderConfigDescriptor.toString()).getConfigClass().getName() +
+                    " and " + folderConfigDescriptor.getConfigClass().getName());
             }
-            folderPathMapping.put(configDescriptor.toString(), configDescriptor);
+            folderPathMapping.put(folderConfigDescriptor.getPath(), folderConfigDescriptor);
         }
         this.folderPathToViewDefinitionEntryMapping = Collections.unmodifiableMap(folderPathMapping);
 
         //pages
-        for (ViewConfigDescriptor viewConfigDescriptor : this.viewDefinitionToViewDefinitionEntryMapping.values())
+        Map<String, ViewConfigDescriptor> viewPathMapping = new HashMap<String, ViewConfigDescriptor>();
+        for (ViewConfigDescriptor pageConfigDescriptor : this.viewDefinitionToViewDefinitionEntryMapping.values())
         {
-            if (viewIdToViewDefinitionEntryMapping.containsKey(viewConfigDescriptor.getViewId()))
+            if (viewPathMapping.containsKey(pageConfigDescriptor.getViewId()))
             {
                 throw new IllegalStateException("Duplicated config for the same page configured. See: " +
-                    viewIdToViewDefinitionEntryMapping.get(
-                            viewConfigDescriptor.getViewId()).getConfigClass().getName() +
-                    " and " + viewConfigDescriptor.getConfigClass().getName());
+                        viewPathMapping.get(
+                            pageConfigDescriptor.getViewId()).getConfigClass().getName() +
+                    " and " + pageConfigDescriptor.getConfigClass().getName());
             }
-            this.viewIdToViewDefinitionEntryMapping.put(viewConfigDescriptor.getViewId(), viewConfigDescriptor);
+            viewPathMapping.put(pageConfigDescriptor.getPath(), pageConfigDescriptor);
         }
+        this.viewPathToViewDefinitionEntryMapping = Collections.unmodifiableMap(viewPathMapping);
     }
 }

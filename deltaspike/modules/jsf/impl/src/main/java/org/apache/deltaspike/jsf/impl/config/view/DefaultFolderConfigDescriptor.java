@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
-class DefaultFolderConfigDescriptor extends AbstractPathConfigDescriptor
+class DefaultFolderConfigDescriptor extends AbstractPathConfigDescriptor<Object>
 {
     private final String path;
 
@@ -38,7 +38,7 @@ class DefaultFolderConfigDescriptor extends AbstractPathConfigDescriptor
     }
 
     @Override
-    public String toString()
+    public String getPath()
     {
         return this.path;
     }

@@ -21,7 +21,7 @@ package org.apache.deltaspike.test.jsf.impl.config.view.controller.uc003;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.core.spi.config.view.ViewConfigNode;
-import org.apache.deltaspike.jsf.api.config.view.controller.*;
+import org.apache.deltaspike.core.api.config.view.controller.*;
 import org.apache.deltaspike.jsf.impl.config.view.ViewConfigExtension;
 import org.apache.deltaspike.jsf.impl.config.view.ViewConfigResolverProducer;
 import org.junit.After;
@@ -100,18 +100,18 @@ public class ViewConfigTest
         ViewConfigDescriptor viewConfigDescriptor = viewConfigResolver.getViewConfigDescriptor(SimplePageConfig.class);
 
         Assert.assertNotNull(viewConfigDescriptor);
-        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, InitView.class));
-        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreViewAction.class));
-        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreRenderView.class));
-        Assert.assertNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PostRenderView.class));
+        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, InitView.class));
+        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreViewAction.class));
+        Assert.assertNotNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreRenderView.class));
+        Assert.assertNull(viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PostRenderView.class));
 
-        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, InitView.class).getCallbackMethods().keySet().iterator().next());
-        Assert.assertEquals("callbackMethod1", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, InitView.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
+        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, InitView.class).getCallbackMethods().keySet().iterator().next());
+        Assert.assertEquals("callbackMethod1", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, InitView.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
 
-        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreViewAction.class).getCallbackMethods().keySet().iterator().next());
-        Assert.assertEquals("callbackMethod1", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreViewAction.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
+        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreViewAction.class).getCallbackMethods().keySet().iterator().next());
+        Assert.assertEquals("callbackMethod1", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreViewAction.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
 
-        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreRenderView.class).getCallbackMethods().keySet().iterator().next());
-        Assert.assertEquals("callbackMethod2", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerBean.class, PreRenderView.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
+        Assert.assertEquals(PageBean003.class, viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreRenderView.class).getCallbackMethods().keySet().iterator().next());
+        Assert.assertEquals("callbackMethod2", ((List<Method>) viewConfigDescriptor.getCallbackDescriptor(ViewControllerRef.class, PreRenderView.class).getCallbackMethods().values().iterator().next()).iterator().next().getName());
     }
 }

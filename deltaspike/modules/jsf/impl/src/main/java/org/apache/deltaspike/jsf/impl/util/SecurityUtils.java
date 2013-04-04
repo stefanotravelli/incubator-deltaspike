@@ -24,12 +24,12 @@ import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
-import org.apache.deltaspike.jsf.api.navigation.ViewNavigationHandler;
+import org.apache.deltaspike.core.api.config.view.navigation.ViewNavigationHandler;
 import org.apache.deltaspike.security.api.authorization.AccessDecisionState;
 import org.apache.deltaspike.security.api.authorization.AccessDeniedException;
 import org.apache.deltaspike.security.api.authorization.ErrorViewAwareAccessDeniedException;
+import org.apache.deltaspike.security.api.authorization.Secured;
 import org.apache.deltaspike.security.api.authorization.SecurityViolation;
-import org.apache.deltaspike.security.api.authorization.annotation.Secured;
 import org.apache.deltaspike.security.spi.authorization.EditableAccessDecisionVoterContext;
 import org.apache.deltaspike.security.spi.authorization.SecurityViolationHandler;
 
@@ -45,7 +45,7 @@ import java.util.Set;
 public abstract class SecurityUtils
 {
     public static void invokeVoters(EditableAccessDecisionVoterContext accessDecisionVoterContext,
-                                    ConfigDescriptor viewConfigDescriptor)
+                                    ConfigDescriptor<?> viewConfigDescriptor)
     {
         if (viewConfigDescriptor == null)
         {
@@ -156,7 +156,7 @@ public abstract class SecurityUtils
 
             if (errorPageDescriptor != null)
             {
-                errorView = errorPageDescriptor.getViewConfig();
+                errorView = errorPageDescriptor.getConfigClass();
             }
         }
 

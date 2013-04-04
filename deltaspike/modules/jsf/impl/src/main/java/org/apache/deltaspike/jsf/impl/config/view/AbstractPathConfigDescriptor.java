@@ -19,7 +19,7 @@
 package org.apache.deltaspike.jsf.impl.config.view;
 
 import org.apache.deltaspike.core.api.config.view.metadata.ExecutableCallbackDescriptor;
-import org.apache.deltaspike.core.api.config.view.metadata.annotation.DefaultCallback;
+import org.apache.deltaspike.core.api.config.view.metadata.DefaultCallback;
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 
@@ -29,13 +29,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-abstract class AbstractPathConfigDescriptor implements ConfigDescriptor
+abstract class AbstractPathConfigDescriptor<CT> implements ConfigDescriptor<CT>
 {
-    private final Class source;
+    private final Class<? extends CT> source;
     private List<Annotation> metaData;
     private Map<Class<? extends Annotation>, List<CallbackDescriptor>> callbackDescriptors;
 
-    AbstractPathConfigDescriptor(Class configClass,
+    AbstractPathConfigDescriptor(Class<? extends CT> configClass,
                                  List<Annotation> mergedMetaData,
                                  Map<Class<? extends Annotation>, List<CallbackDescriptor>> callbackDescriptors)
     {
@@ -45,7 +45,7 @@ abstract class AbstractPathConfigDescriptor implements ConfigDescriptor
     }
 
     @Override
-    public Class getConfigClass()
+    public Class<? extends CT> getConfigClass()
     {
         return this.source;
     }
@@ -131,5 +131,11 @@ abstract class AbstractPathConfigDescriptor implements ConfigDescriptor
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPath();
     }
 }

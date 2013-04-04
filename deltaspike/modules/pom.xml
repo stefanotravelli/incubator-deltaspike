@@ -38,5 +38,6 @@
         <module>security</module>
         <module>jpa</module>
         <module>jsf</module>
+        <module>partial-bean</module>
     </modules>
 </project>

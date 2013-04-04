@@ -25,14 +25,13 @@ import java.util.List;
  * Base descriptor for all type-safe view-configs which represents the
  * config-class and meta-data, callbacks,... provided by/bound to this class.
  */
-public interface ConfigDescriptor
+public interface ConfigDescriptor<CT /*config type*/>
 {
-    //needed e.g. for folder nodes which aren't view-configs
-    Class getConfigClass();
+    Class<? extends CT> getConfigClass();
 
     /**
      * Meta-data which is configured for the entry. It allows to provide and resolve meta-data annotated
-     * with {@link org.apache.deltaspike.core.api.config.view.metadata.annotation.ViewMetaData}
+     * with {@link ViewMetaData}
      *
      * @return meta-data of the current entry
      */
@@ -40,7 +39,7 @@ public interface ConfigDescriptor
 
     /**
      * Meta-data which is configured for the entry. It allows to provide and resolve meta-data annotated
-     * with {@link org.apache.deltaspike.core.api.config.view.metadata.annotation.ViewMetaData}
+     * with {@link ViewMetaData}
      *
      * @param target target type
      * @return custom meta-data for the given type of the current entry
@@ -82,4 +81,10 @@ public interface ConfigDescriptor
     <T extends ExecutableCallbackDescriptor> T getExecutableCallbackDescriptor(Class<? extends Annotation> metaDataType,
                                                                                Class<? extends Annotation> callbackType,
                                                                                Class<? extends T> executorType);
+
+    /**
+     * Returns the string representation of the resource represented by #getConfigClass
+     * @return relative path to the folder or page
+     */
+    String getPath();
 }

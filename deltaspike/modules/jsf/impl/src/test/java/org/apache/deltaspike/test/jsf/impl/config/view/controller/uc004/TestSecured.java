@@ -20,8 +20,8 @@ package org.apache.deltaspike.test.jsf.impl.config.view.controller.uc004;
 
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ExecutableCallbackDescriptor;
-import org.apache.deltaspike.core.api.config.view.metadata.annotation.DefaultCallback;
-import org.apache.deltaspike.core.api.config.view.metadata.annotation.ViewMetaData;
+import org.apache.deltaspike.core.api.config.view.metadata.DefaultCallback;
+import org.apache.deltaspike.core.api.config.view.metadata.ViewMetaData;
 import org.apache.deltaspike.core.spi.config.view.ConfigPreProcessor;
 import org.apache.deltaspike.core.spi.config.view.ViewConfigNode;
 
@@ -47,8 +47,8 @@ public @interface TestSecured
     class AnnotationPreProcessor implements ConfigPreProcessor<TestSecured>
     {
         //for a real implementation see e.g.:
-        //org.apache.deltaspike.security.api.authorization.annotation.Secured
-        //org.apache.deltaspike.jsf.api.config.view.controller.ViewControllerBean
+        //org.apache.deltaspike.security.api.authorization.Secured
+        //org.apache.deltaspike.core.api.config.view.controller.ViewControllerRef
         @Override
         public TestSecured beforeAddToConfig(TestSecured metaData, ViewConfigNode viewConfigNode)
         {
